@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddRelationshipsToUsersTable extends Migration
+class CreateCacheTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddRelationshipsToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users_', function (Blueprint $table) {
-            //
+        Schema::create('cache', function (Blueprint $table) {
+            $table->string('key')->unique();
+            $table->mediumText('value');
+            $table->integer('expiration');
         });
     }
 
@@ -25,8 +27,6 @@ class AddRelationshipsToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users_', function (Blueprint $table) {
-            $table->foreign('author_id')->references('id')->on('users')->onDelete('restrict');
-        });
+        Schema::dropIfExists('cache');
     }
 }
