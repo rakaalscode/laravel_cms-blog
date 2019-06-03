@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use GrahamCampbell\Markdown\Facades\Markdown;
+
 
 class User extends Authenticatable
 {
@@ -45,5 +47,19 @@ class User extends Authenticatable
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function getBioHtmlAttribute($value)
+    {
+        return $this->bio ? Markdown::convertToHtml(e($this->bio)) : NULL;
+    }
+
+    public function avatar()
+    {
+        $email = $this->email;
+        $default = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/1024px-User_icon_2.svg.png";
+        $size = 100;
+
+        return "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $email ) ) ) . "?d=" . urlencode( $default ) . "&s=" . $size;
     }
 }
