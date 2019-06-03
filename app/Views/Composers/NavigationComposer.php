@@ -28,6 +28,7 @@ class NavigationComposer
     {
         $popularPosts = Post::published()->popular()->take(3)->get();
 
+      
         $view->with('popularPosts', $popularPosts);
     }
 }
